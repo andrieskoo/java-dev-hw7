@@ -7,10 +7,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Utility {
     private static Logger loger = LogManager.getLogger(Utility.class);
@@ -33,8 +30,8 @@ public class Utility {
     }
 
     static void executeQuery(Connection connection, String query) {
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(query);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.execute();
             loger.info("Query were executed successful");
             System.out.println("YRA");
         } catch (SQLException e) {
@@ -45,9 +42,10 @@ public class Utility {
 
     static ResultSet executeResultQuery(Connection connection, String query) {
         try {
-            Statement statement = connection.createStatement();
+//            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(query);
             loger.info("Query were executed successful");
-            return statement.executeQuery(query);
+            return statement.executeQuery();
 
         } catch (SQLException e) {
             loger.error("Error while execute sql statement");
